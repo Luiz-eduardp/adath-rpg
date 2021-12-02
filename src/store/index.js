@@ -7,7 +7,7 @@ export default new Vuex.Store({
     state: {
         playerLife: 100,
         monsterLife: 100,
-        danoRealMob: 100,
+        danoRealMob: 10,
         danoRealUser: 15,
         curarvalue: 30,
         curarpode: false,
