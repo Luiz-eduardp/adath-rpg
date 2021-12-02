@@ -12,10 +12,15 @@
                     <li>Experiência: {{this.$store.state.xp}}/{{this.$store.state.xpMax}} </li>
                     <li>Cobre: {{this.$store.state.cobre}} </li>
                 </ul>
+                <h3>Inventário</h3>
+<ul style="list-style: none;">
+ <li> Poções de Cura : {{this.$store.state.potions}} <button class="success" @click="UsarpotX()">Usar</button></li>
+</ul>
 </div>
 </template>
 
 <script>
+import { mapActions,mapGetters} from 'vuex'
 
 export default {
 
@@ -26,12 +31,22 @@ export default {
    }
  },
  computed: {
-  
+    ...mapGetters([
+      'curarpode', 'potUsada'
+    ]),
+ },
+ methods: {
+    ...mapActions([
+      'usarPot'
+    ]),
+    UsarpotX(){
+       this.usarPot()
+    }
  },
 }
 </script>
 
-<style>
+<style scope>
   h1{
     text-align: center;
   }

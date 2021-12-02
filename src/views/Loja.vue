@@ -1,49 +1,67 @@
 <template>
-  <div>
-    <h1>Loja</h1>
+  <div class="panel loja">
+                <h3>Loja de Itens</h3>
 
-    <div class="block">
-      <input type="text" v-model="search" id="searchInput" class="input-res" />
+                <!-- <div class="block"><input type="text" v-model="pesquisarV"  id="searchInput" class="input-res">
 
-      <label style="margin-left: 15px" for="searchInput"
-        >Pesquise aqui por Itens</label
-      >
-    </div>
-    <table id="table">
-      <thead>
-        <tr>
-          <th scope="col">Custo</th>
-          <th scope="col">Nome</th>
-          <th scope="col">Quantidade</th>
-        </tr>
-      </thead>
+                    <button @click="pesquisaLojax()"> Pesquisar</button>
+                </div> -->
+                <table id="table">
 
-      <tbody>
-        <tr v-for="(item, i) in this.$store.state.filteredItems" :key="i">
-          <td data-label="Custo">&nbsp; {{ this.$store.state.item.Custo }}</td>
-          <td data-label="Nome:">&nbsp;{{ this.$store.state.item.Nome }}</td>
-          <td data-label="Quantidade:">&nbsp;{{ this.$store.state.item.Quantidade }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                    <thead>
+                        <tr>
+                            <th scope="col">Custo</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Quantidade</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+
+                        <tr v-for="(item, i) in this.filteredItems" :key="i">
+                            <td data-label="Custo">&nbsp; {{ item.Custo }} </td>
+                            <td data-label="Nome:">&nbsp;{{ item.Nome }}</td>
+                            <td data-label="Quantidade:">&nbsp;{{ item.Quantidade }} </td>
+                            <td>&nbsp; <button class="success item-loja" @click="comprarPotX()">Comprar</button></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Loja",
+data() {
+  return {
+    pesquisarV: ''
+  }
+},
+  computed: {
+    ...mapGetters(["pesquisarItem", "catalogo", "filteredItems"]),
   
-  methods: {
-    filteredItems() {
-      return this.items.filter((item) => {
-        return item.Nome.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-      });
+        
     },
+  methods: {
+    ...mapActions(["pesquisaLoja", "comprarPotions"]),
+    pesquisaLojax(pesquisarV){
+      let search = pesquisarV.toLowerCase(pesquisarV)
+      this.pesquisaLoja(search)
+    },
+    comprarPotX(){
+       this.comprarPotions()
+    }
   },
+
 };
 </script>
 
-<style>
+<style scope>
 h1 {
   text-align: center;
 }
@@ -149,5 +167,9 @@ table th {
   outline: none;
   margin: 0;
   box-sizing: border-box;
+}
+.success, .item-loja{
+  width: 80px !important;
+  height: 80px !important;
 }
 </style>
