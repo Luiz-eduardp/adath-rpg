@@ -1,4 +1,4 @@
-# projeto-simples
+# projeto-Adath RPG
 
 ## Project setup
 ```
