@@ -7,8 +7,13 @@ export default new Vuex.Store({
     state: {
         playerLife: 100,
         monsterLife: 100,
-        danoRealMob: 10,
-        danoRealUser: 10,
+        danoRealMob: 100,
+        danoRealUser: 15,
+        curarvalue: 30,
+        curarpode: false,
+        ganhou: false,
+        perdeu: false,
+        podejogar: true,
         logs: [],
         username: "Ed",
         userImg: "https://media.discordapp.net/attachments/875746841516453911/914140552210034698/12710439_0.png",
@@ -40,36 +45,72 @@ export default new Vuex.Store({
         ],
     },
     getters: {
-        hasResult() {
-            return (
-                this.$store.playerLife == 0 || this.$store.monsterLife == 0
-            );
+        hasResult(state) {
+
+            if (state.monsterLife <= 0) {
+                return state.running = false,
+                    state.ganhou = true
+
+            }
+
+            if (state.playerLife <= 0) {
+                return state.running = false,
+                    state.perdeu = true,
+                    state.podejogar = false
+
+            }
+
+        },
+        podejogar(state) {
+            if (state.playerLife >= 0) {
+
+                state.podejogar = true
+
+            }
+
+
+
         },
         filteredItems() {
             return this.items.filter(item => {
                 return item.Nome.toLowerCase().indexOf(this.search.toLowerCase()) > -1
             })
+        },
+        curarpode(state) {
+            if (state.playerLife < state.hPMax) {
+                return state.curarpode = true
+            }
         }
     },
     mutations: {
-        dano(state, payload) {
-            state.playerLife -= payload
+        dano(state) {
+            state.playerLife -= state.danoRealMob
         },
-        danoMob(state, payload) {
-            state.monsterLife -= payload
+        danoMob(state) {
+            state.monsterLife -= state.danoRealUser
         },
-        false(state, payload) {
-            state.running = payload
+        false(state) {
+            state.running = false
+        },
+        curar(state) {
+            state.playerLife += state.curarvalue
         }
     },
     actions: {
-        dano(context, payload) {
-            context.commit('dano', payload)
+        dano(context) {
+            context.commit('dano')
         },
 
-        danoMob(context, payload) {
-            context.commit('danoMob', payload)
+        danoMob(context) {
+            context.commit('danoMob')
         },
+        false(context) {
+            context.commit('false')
+        },
+
+        curar(context) {
+            context.commit('curar')
+        }
 
     },
     modules: {}

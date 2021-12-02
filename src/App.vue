@@ -5,7 +5,7 @@
     </v-navigation-drawer>
 
     <v-app-bar app>
-      <ul style="display:inline" id="nav">
+      <ul style="display:inline; " id="nav">
        <li class="inline"><router-link to="/">Home</router-link> </li>
         <li class="inline"><router-link to="/Contato">Contato</router-link></li>
        <li class="inline"> <router-link to="/loja">Loja</router-link></li>

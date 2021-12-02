@@ -32,7 +32,7 @@
         </div>
       </div>
       <div v-if="hasResult" class="panel result">
-        <div v-if="this.$store.state.monsterLife == 0" class="win">
+        <div v-if="this.$store.state.ganhou" class="win">
           Você ganhou!!! :)
         </div>
         <div v-else class="lose">Você perdeu! :(</div>
@@ -43,17 +43,20 @@
           <button @click="attack(true)" class="btn especial-attack">
             Ataque Especial
           </button>
-          <button @click="healAndHurt" class="btn heal">Curar</button>
+          <button v-show="this.curarpode" @click="curarx()" class="btn heal ">Curar</button>
           <button
-            @click="false"
+            @click="falsex()"
             class="btn give-up"
           >
             Desistir
           </button>
         </template>
-        <button v-else @click="startGame" class="btn new-game">
+        <button v-if="this.$store.state.podejogar" @click="startGame" class="btn new-game">
           Procurar inimigo
         </button>
+        <div v-else>
+          Você precisa se curar
+        </div>
       </div>
       <div v-if="this.$store.state.logs.length" class="panel logs">
         <ul>
@@ -72,7 +75,7 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 export default {
   name: "Explorar",
   data() {
@@ -83,36 +86,42 @@ danoRealUser: 10,
     };
   },
   computed: {
-    hasResult() {
-      return (
-        this.$store.state.playerLife == 0 || this.$store.state.monsterLife == 0
-      );
-    },
+    ...mapGetters([
+      'curarpode', 'hasResult', 'podejogarx'
+    ]),
+   
 
     logs() {
       return this.$store.state.logs;
     },
   },
   methods: {
-    ...mapActions(),
+    ...mapActions([
+      'dano', 'danoMob','false', 'curar'
+    ]),
     startGame() {
       this.$store.state.running = true;
       this.$store.state.playerLife = 100;
       this.$store.state.monsterLife = 100;
       this.$store.state.logs = [];
       const idx = Math.floor(Math.random() * this.$store.state.mobs.length);
-      this.$store.state.electedMob = this.$store.state.mobs[idx];
+      this.$store.state.selectedMob = this.$store.state.mobs[idx];
 
       this.$store.state.selectedMobImg = this.$store.state.mobsImgs[idx];
     },
     atacar(){
-      this.dano(this.danoRealMob),
+      this.dano(),
       
-         this.danoMob(this.danoRealUser)
+         this.danoMob()
            
     },
-    false(){
-       this.false('false')
+    falsex(){
+       this.false()
+       console.log('foi')
+    },
+    curarx(){
+       this.curar()
+        this.dano()
     }
   }
 };
