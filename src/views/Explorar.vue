@@ -33,7 +33,8 @@
       </div>
       <div v-if="hasResult" class="panel result">
         <div v-if="this.$store.state.ganhou" class="win">
-          Você ganhou!!! :)
+          Você ganhou!!!
+          XP recebido : {{this.$store.state.xpgain}}
         </div>
         <div v-else class="lose">Você perdeu! :(</div>
       </div>
@@ -44,6 +45,7 @@
             Ataque Especial
           </button>
           <button v-show="this.curarpode" @click="curarx()" class="btn heal ">Curar</button>
+          <button v-show="this.curarpode" @click="UsarpotX()" class="btn heal ">Consumir poção de Cura</button>
           <button
             @click="falsex()"
             class="btn give-up"
@@ -87,7 +89,7 @@ danoRealUser: 10,
   },
   computed: {
     ...mapGetters([
-      'curarpode', 'hasResult', 'podejogarx'
+      'curarpode', 'hasResult', 'podejogarx', 'potUsada'
     ]),
    
 
@@ -97,7 +99,7 @@ danoRealUser: 10,
   },
   methods: {
     ...mapActions([
-      'dano', 'danoMob','false', 'curar'
+      'dano', 'danoMob','false', 'curar', 'usarPot'
     ]),
     startGame() {
       this.$store.state.running = true;
@@ -122,6 +124,9 @@ danoRealUser: 10,
     curarx(){
        this.curar()
         this.dano()
+    },
+     UsarpotX(){
+       this.usarPot()
     }
   }
 };

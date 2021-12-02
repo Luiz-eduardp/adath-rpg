@@ -20,15 +20,16 @@ export default new Vuex.Store({
         username: "Ed",
         userImg: "https://media.discordapp.net/attachments/875746841516453911/914140552210034698/12710439_0.png",
         running: false,
-        hPMax: "100",
-        force: "20",
-        defesa: "30",
-        agilidade: "40",
-        inteli: "60",
-        lvl: "1",
-        xp: "0",
-        xpMax: "500",
-        cobre: "80",
+        hPMax: 100,
+        force: 20,
+        defesa: 30,
+        agilidade: 40,
+        inteli: 60,
+        lvl: 1,
+        xpgain: 10,
+        xp: 0,
+        xpMax: 500,
+        cobre: 80,
         classe: "Mago",
         search: "",
         products: [
@@ -51,7 +52,8 @@ export default new Vuex.Store({
 
             if (state.monsterLife <= 0) {
                 return state.running = false,
-                    state.ganhou = true
+                    state.ganhou = true,
+                    state.xp += state.xpgain
 
             }
 
@@ -109,10 +111,12 @@ export default new Vuex.Store({
             state.potions++
         },
         potUsada(state) {
+            if (state.potions > 0) {
+                state.playerLife = state.hPMax,
+                    state.potions--,
+                    state.podejogar = true
+            }
 
-            state.playerLife = state.hPMax,
-                state.potions--
-                state.podejogar = true
         }
 
     },
