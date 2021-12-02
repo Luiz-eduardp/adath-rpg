@@ -19,10 +19,10 @@
       </thead>
 
       <tbody>
-        <tr v-for="(item, i) in filteredItems" :key="i">
-          <td data-label="Custo">&nbsp; {{ item.Custo }}</td>
-          <td data-label="Nome:">&nbsp;{{ item.Nome }}</td>
-          <td data-label="Quantidade:">&nbsp;{{ item.Quantidade }}</td>
+        <tr v-for="(item, i) in this.$store.state.filteredItems" :key="i">
+          <td data-label="Custo">&nbsp; {{ this.$store.state.item.Custo }}</td>
+          <td data-label="Nome:">&nbsp;{{ this.$store.state.item.Nome }}</td>
+          <td data-label="Quantidade:">&nbsp;{{ this.$store.state.item.Quantidade }}</td>
         </tr>
       </tbody>
     </table>
@@ -32,16 +32,7 @@
 <script>
 export default {
   name: "Loja",
-  data() {
-    return {
-      search: "",
-      items: [
-        { Custo: "5", Nome: "Poção de Cura", Quantidade: "1" },
-        { Custo: "50", Nome: "Poção de XP", Quantidade: "1" },
-        { Custo: "500", Nome: "Espada de cobre", Quantidade: "1" },
-      ],
-    };
-  },
+  
   methods: {
     filteredItems() {
       return this.items.filter((item) => {

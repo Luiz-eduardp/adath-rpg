@@ -2,52 +2,67 @@
   <div>
     <h1>Explorar</h1>
     <div>
-      <div v-show="running" class="panel scores">
+      <div v-show="this.$store.state.running" class="panel scores">
         <div class="score">
-          <h1>{{ username }}</h1>
-          <img class="user-img" v-bind:src="userImg" />
+          <h1>{{ this.$store.state.username }}</h1>
+          <img class="user-img" v-bind:src="this.$store.state.userImg" />
           <div class="life-bar">
             <div
               class="life"
-              :class="{ danger: playerLife < 20 }"
-              :style="{ width: playerLife + '%' }"
+              :class="{ danger: this.$store.state.playerLife < 20 }"
+              :style="{ width: this.$store.state.playerLife + '%' }"
             ></div>
           </div>
-          <div>{{ playerLife }} pontos de HP Restantes</div>
+          <div >{{ this.$store.state.playerLife }} pontos de HP Restantes</div>
         </div>
         <div class="score">
-          <h1>{{ selectedMob }}</h1>
-          <img class="monster-img" v-bind:src="selectedMobImg" />
+          <h1>{{ this.$store.state.selectedMob }}</h1>
+          <img
+            class="monster-img"
+            v-bind:src="this.$store.state.selectedMobImg"
+          />
           <div class="life-bar">
             <div
               class="life"
-              :class="{ danger: monsterLife < 20 }"
-              :style="{ width: monsterLife + '%' }"
+              :class="{ danger: this.$store.state.monsterLife < 20 }"
+              :style="{ width: this.$store.state.monsterLife + '%' }"
             ></div>
           </div>
-          <div>{{ monsterLife }} pontos de HP Restantes</div>
+          <div>{{ this.$store.state.monsterLife }} pontos de HP Restantes</div>
         </div>
       </div>
       <div v-if="hasResult" class="panel result">
-        <div v-if="monsterLife == 0" class="win">Você ganhou!!! :)</div>
+        <div v-if="this.$store.state.monsterLife == 0" class="win">
+          Você ganhou!!! :)
+        </div>
         <div v-else class="lose">Você perdeu! :(</div>
       </div>
       <div class="panel buttons">
-        <template v-if="running">
-          <button @click="attack(false)" class="btn attack">Ataque</button>
+        <template v-if="this.$store.state.running">
+          <button @click="atacar()" class="btn attack">Ataque</button>
           <button @click="attack(true)" class="btn especial-attack">
             Ataque Especial
           </button>
           <button @click="healAndHurt" class="btn heal">Curar</button>
-          <button @click="running = false" class="btn give-up">Desistir</button>
+          <button
+            @click="false"
+            class="btn give-up"
+          >
+            Desistir
+          </button>
         </template>
         <button v-else @click="startGame" class="btn new-game">
           Procurar inimigo
         </button>
       </div>
-      <div v-if="logs.length" class="panel logs">
+      <div v-if="this.$store.state.logs.length" class="panel logs">
         <ul>
-          <li v-for="log in logs" :class="log.cls" class="log" :key="log.text">
+          <li
+            v-for="log in logs"
+            :class="log.cls"
+            class="log"
+            :key="log.text"
+          >
             {{ log.text }}
           </li>
         </ul>
@@ -57,108 +72,49 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 export default {
   name: "Explorar",
   data() {
     return {
-      running: false,
-      explorar: false,
-      loja: false,
-      perfil: false,
-      playerLife: 100,
-      monsterLife: 100,
-      logs: [],
-      username: "Ed",
-      userImg:
-        "https://media.discordapp.net/attachments/875746841516453911/914140552210034698/12710439_0.png",
-      hp: "100",
-      hPMax: "100",
-      force: "20",
-      defesa: "30",
-      agilidade: "40",
-      inteli: "60",
-      lvl: "1",
-      xp: "0",
-      xpMax: "500",
-      cobre: "80",
-      classe: "Mago",
-      search: "",
-      items: [
-        { Custo: "5", Nome: "Poção de Cura", Quantidade: "1" },
-        { Custo: "50", Nome: "Poção de XP", Quantidade: "1" },
-        { Custo: "500", Nome: "Espada de cobre", Quantidade: "1" },
-      ],
-      selectedMob: "Procurando",
-      selectedMobImg: "Procurando",
-      mobs: ["Slime", "Verme", "Dêmonio", "Besouro"],
-      mobsImgs: [
-        "https://media.discordapp.net/attachments/875746841516453911/914138578743873576/d1dde4d97d7792a3c839a3af2254ee43.png",
-        "https://media.discordapp.net/attachments/875746841516453911/914138546590330900/cd966776a8576a968a87f8a5ee3b5def.png",
-        "https://media.discordapp.net/attachments/905519263404654603/906888178928066620/Zalgo-0.jpg",
-        "https://media.discordapp.net/attachments/905519263404654603/905520055058587689/images_-_2021-11-03T151151.781.jpeg",
-      ],
+
+danoRealMob: 10,
+danoRealUser: 10,
     };
   },
   computed: {
     hasResult() {
-      return this.playerLife == 0 || this.monsterLife == 0;
+      return (
+        this.$store.state.playerLife == 0 || this.$store.state.monsterLife == 0
+      );
     },
-    filteredItems() {
-      return this.items.filter((item) => {
-        return item.Nome.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-      });
+
+    logs() {
+      return this.$store.state.logs;
     },
   },
   methods: {
+    ...mapActions(),
     startGame() {
-      this.running = true;
-      this.playerLife = 100;
-      this.monsterLife = 100;
-      this.logs = [];
-      const idx = Math.floor(Math.random() * this.mobs.length);
-      this.selectedMob = this.mobs[idx];
+      this.$store.state.running = true;
+      this.$store.state.playerLife = 100;
+      this.$store.state.monsterLife = 100;
+      this.$store.state.logs = [];
+      const idx = Math.floor(Math.random() * this.$store.state.mobs.length);
+      this.$store.state.electedMob = this.$store.state.mobs[idx];
 
-      this.selectedMobImg = this.mobsImgs[idx];
+      this.$store.state.selectedMobImg = this.$store.state.mobsImgs[idx];
     },
-    attack(especial) {
-      this.hurt("monsterLife", 5, 10, especial, "Jogador", "Monstro", "player");
-      if (this.monsterLife > 0) {
-        this.hurt("playerLife", 7, 12, false, "Monstro", "Jogador", "monster");
-      }
+    atacar(){
+      this.dano(this.danoRealMob),
+      
+         this.danoMob(this.danoRealUser)
+           
     },
-    hurt(prop, min, max, especial, source, target, cls) {
-      const plus = especial ? 5 : 0;
-      const hurt = this.getRandom(min + plus, max + plus);
-      this[prop] = Math.max(this[prop] - hurt, 0);
-      this.registerLog(`${source} atingiu ${target} com ${hurt}.`, cls);
-    },
-    healAndHurt() {
-      this.heal(10, 15);
-      this.hurt("playerLife", 7, 12, false, "Monstro", "Jogador", "monster");
-    },
-    heal(min, max) {
-      const heal = this.getRandom(min, max);
-      this.playerLife = Math.min(this.playerLife + heal, 100);
-      this.registerLog(`Jogador se curou em ${heal}.`, "player");
-    },
-    getRandom(min, max) {
-      const value = Math.random() * (max - min) + min;
-      return Math.round(value);
-    },
-    registerLog(text, cls) {
-      this.logs.unshift({ text, cls });
-    },
-  },
-  watch: {
-    hasResult(value) {
-      if (value) this.running = false;
-    },
-    vidaUser() {
-      if (this.playerLife <= 0) {
-        this.$emit('morreu', this.playerLife);
-      }
-    },
-  },
+    false(){
+       this.false('false')
+    }
+  }
 };
 </script>
 
