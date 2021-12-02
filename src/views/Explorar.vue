@@ -33,7 +33,7 @@
       </div>
       <div v-if="hasResult" class="panel result">
         <div v-if="this.$store.state.ganhou" class="win">
-          Você ganhou!!!
+          Você ganhou!!!<br>
           XP recebido : {{this.$store.state.xpgain}}
         </div>
         <div v-else class="lose">Você perdeu! :(</div>
